@@ -35,17 +35,10 @@
    ```
 4. Запустите `index.html` через локальный сервер (например, расширение **Live Server** в VS Code) или откройте файл в браузере.
 
-## 📁 Структура проекта
-
-```text
-kinotrack/
-├── index.html   # Разметка шапки, экранов каталога, деталей и модальных окон
-├── style.css    # Стили тёмной темы, сетка карточек и адаптивность
-├── script.js    # Логика работы с TMDB API, рендеринг карточек и localStorage
-
 
 
 <img width="1905" height="1080" alt="{20588B75-3284-4854-BDA5-040BDB660415}" src="https://github.com/user-attachments/assets/8e7dc765-1b15-4866-bf50-8f65cdae0a00" />
+   
 
 
 <img width="1905" height="1080" alt="{D2FB9337-BE75-4BA4-91FB-7871986593BD}" src="https://github.com/user-attachments/assets/90bf1c01-f6c5-4c9a-9805-3ac8af76eff9" />
@@ -54,3 +47,10 @@ kinotrack/
 
 <img width="1905" height="1080" alt="{27421AC0-EBAF-4B62-98D8-36FAE8FCD983}" src="https://github.com/user-attachments/assets/edecf38c-6b23-406d-b7ca-c80c6b73f6e6" />
 
+## 📁 Структура проекта
+
+```text
+kinotrack/
+├── index.html   # Разметка шапки, экранов каталога, деталей и модальных окон
+├── style.css    # Стили тёмной темы, сетка карточек и адаптивность
+├── script.js    # Логика работы с TMDB API, рендеринг карточек и localStorage
