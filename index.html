@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KinoTrack</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ШАПКА САЙТА -->
+  <header class="header">
+    <!-- Левая часть: название проекта -->
+    <div class="header-left">
+      <button id="logoBtn" class="logo-btn" title="На главную">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <rect x="2" y="3" width="20" height="18" rx="3"></rect>
+          <path d="M7 3v18M17 3v18M2 9h5M2 15h5M17 9h5M17 15h5"></path>
+        </svg>
+        <span>KinoTrack</span>
+      </button>
+    </div>
+
+    <!-- Центр: переключатели категорий и строка поиска -->
+    <div class="header-center">
+      <div class="search-tabs" role="tablist">
+        <button class="tab-btn active" data-type="movie">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+          </svg>
+          Фильмы
+        </button>
+        <button class="tab-btn" data-type="tv">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="15" rx="2"></rect>
+            <polyline points="17 2 12 7 7 2"></polyline>
+          </svg>
+          Сериалы
+        </button>
+        <button class="tab-btn" data-type="person">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Актёры
+        </button>
+      </div>
+
+      <form id="searchForm" class="search-box">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Искать фильмы..."
+          autocomplete="off"
+        />
+        <button type="button" id="clearSearchBtn" class="clear-search hidden" title="Очистить">&times;</button>
+      </form>
+    </div>
+
+    <!-- Правая часть: иконка сохранённых и иконка аккаунта -->
+    <div class="header-right">
+      <button id="savedNavBtn" class="icon-action-btn" title="Сохранённые фильмы и сериалы">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span id="savedBadge" class="badge">0</span>
+      </button>
+
+      <button id="accountNavBtn" class="icon-action-btn account-btn" title="Аккаунт">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span id="headerUserName" class="header-username">Войти</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+  <main class="main-container">
+    <!-- Уведомление об ошибке / токене -->
+    <div id="statusBanner" class="status-banner hidden"></div>
+
+    <!-- ЭКРАН 1: КАТАЛОГ (Популярное / Поиск / Сохранённое) -->
+    <section id="catalogView">
+      <div class="section-header">
+        <h2 id="sectionTitle">Популярные фильмы</h2>
+        <button id="backFromSavedBtn" class="secondary-btn hidden">← Вернуться в каталог</button>
+      </div>
+
+      <div id="loader" class="loader hidden">
+        <div class="spinner"></div>
+        <span>Загрузка данных...</span>
+      </div>
+
+      <div id="emptyState" class="empty-state hidden">
+        Ничего не найдено по вашему запросу.
+      </div>
+
+      <div id="cardsGrid" class="cards-grid"></div>
+
+      <div id="loadMoreContainer" class="load-more-container hidden">
+        <button id="loadMoreBtn" class="secondary-btn load-more-btn">Загрузить ещё</button>
+      </div>
+    </section>
+
+    <!-- ЭКРАН 2: ДЕТАЛИ ФИЛЬМА ИЛИ СЕРИАЛА -->
+    <section id="mediaDetailsView" class="details-view hidden">
+      <button class="back-btn" id="backFromMediaBtn">← Назад</button>
+      <div id="mediaDetailsContent"></div>
+    </section>
+
+    <!-- ЭКРАН 3: ДЕТАЛИ АКТЁРА -->
+    <section id="actorDetailsView" class="details-view hidden">
+      <button class="back-btn" id="backFromActorBtn">← Назад</button>
+      <div id="actorDetailsContent"></div>
+    </section>
+  </main>
+
+  <!-- МОДАЛЬНОЕ ОКНО: РЕГИСТРАЦИЯ И ВХОД -->
+  <div id="authModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Добро пожаловать в CineTrack</h3>
+        <p class="modal-subtitle">Войдите или создайте аккаунт, чтобы сохранять фильмы и ставить оценки</p>
+      </div>
+
+      <div class="auth-switcher">
+        <button id="showLoginTab" class="auth-tab active">Вход</button>
+        <button id="showRegisterTab" class="auth-tab">Регистрация</button>
+      </div>
+
+      <!-- Форма входа -->
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required placeholder="user@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Пароль</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" />
+        </div>
+        <p id="loginError" class="form-error hidden"></p>
+        <button type="submit" class="primary-btn full-width">Войти</button>
+      </form>
+
+      <!-- Форма регистрации -->
+      <form id="registerForm" class="auth-form hidden">
+        <div class="form-group">
+          <label for="regName">Имя пользователя</label>
+          <input type="text" id="regName" required placeholder="Например, Павел" />
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" required placeholder="user@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Пароль (минимум 4 символа)</label>
+          <input type="password" id="regPassword" minlength="4" required placeholder="••••••••" />
+        </div>
+        <p id="regError" class="form-error hidden"></p>
+        <button type="submit" class="primary-btn full-width">Зарегистрироваться</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО: ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ -->
+  <div id="profileModal" class="modal-backdrop hidden">
+    <div class="modal-card profile-card">
+      <button id="closeProfileModalBtn" class="modal-close">&times;</button>
+      <div class="profile-avatar" id="profileAvatarLetter"></div>
+      <h3 id="profileName"></h3>
+      <p id="profileEmail" class="modal-subtitle"></p>
+
+      <div class="profile-stats">
+        <div class="stat-box">
+          <span class="stat-num" id="profileSavedCount">0</span>
+          <span class="stat-label">В сохранённом</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="profileRatedCount">0</span>
+          <span class="stat-label">Оценено</span>
+        </div>
+      </div>
+
+      <button id="logoutBtn" class="danger-btn full-width">Выйти из аккаунта</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
